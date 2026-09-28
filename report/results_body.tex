@@ -88,7 +88,7 @@ The forecasts and warnings are served through a small Streamlit viewer (Fig.~\re
 \item the overall warning colour for the week and the highest event probabilities;
 \item a day-by-day table of median, 80\% range, threshold, event probabilities and warning level, with the observed Tmax when the date is in the past.
 \end{itemize}
-Dates in the backtest load from the saved forecasts. Any other date triggers a live Chronos-2 run, which takes a few seconds on the laptop. Fig.~\ref{fig:app}(a) is the Nagpur forecast issued on 31 May 2019, one day before the heatwave: the viewer raised a Yellow heat watch with a 52\% chance of a hot day on 1 June, but gave the heatwave itself only 15\%, as discussed in the case studies. Fig.~\ref{fig:app}(b) is a quiet week at Mumbai in May 2024, where the coastal threshold of about 40.5\,\textdegree C was never in reach.
+Dates in the backtest load from the saved forecasts. Any other date triggers a live Chronos-2 run, which takes a few seconds on the laptop. A static browser version with the same views for all saved forecasts is published with GitHub Pages at \url{https://aditya-ravi11.github.io/HeatCastFM/}, so the results can be explored without installing anything. Fig.~\ref{fig:app}(a) is the Nagpur forecast issued on 31 May 2019, one day before the heatwave: the viewer raised a Yellow heat watch with a 52\% chance of a hot day on 1 June, but gave the heatwave itself only 15\%, as discussed in the case studies. Fig.~\ref{fig:app}(b) is a quiet week at Mumbai in May 2024, where the coastal threshold of about 40.5\,\textdegree C was never in reach.
 
 \begin{figure*}[t]
 \centering

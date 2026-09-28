@@ -11,6 +11,8 @@ zero-shot: they are never trained on Indian data.
 Mini project for the Generative AI Laboratory (Experiment 8), use case KJS-CES-01:
 *Climate Intelligence for Heatwave Monitoring, Prediction and Early Warning* (IMD Mumbai-Pune).
 
+**Live demo:** https://aditya-ravi11.github.io/HeatCastFM/ (runs in the browser, nothing to install)
+
 ![HeatCast-FM viewer](outputs/figures/app/app_nagpur_2019.png)
 
 ## Highlights
@@ -93,7 +95,19 @@ python3.11 -m venv .venv
 
 ## Usage
 
-### Viewer app
+### Web viewer (GitHub Pages)
+
+The static viewer in `docs/` is published at https://aditya-ravi11.github.io/HeatCastFM/.
+It shows the saved backtest forecasts for the 7 focus regions and all models, with no
+server or Python needed. Open a specific view with URL parameters, for example
+`?region=Nagpur&date=2019-05-31`. After rerunning the backtest, refresh its data with
+`python scripts/08_export_web.py`.
+
+To try it locally: `cd docs && python -m http.server 8000`, then open http://localhost:8000.
+
+### Viewer app (Streamlit)
+
+The Streamlit version can also run Chronos-2 live for dates outside the backtest.
 
 The viewer needs the data and cached forecasts, so run the pipeline below first.
 
@@ -172,8 +186,9 @@ It is ready to run on a CUDA GPU; the evaluation scripts pick up its forecasts a
 ```
 config.yaml               regions, years, IMD thresholds, model ids
 src/heatcast/             data, labels, models, probabilities, metrics, warnings, point correction
-scripts/                  pipeline steps 01 to 07
-app/streamlit_app.py      viewer
+scripts/                  pipeline steps 01 to 08
+app/streamlit_app.py      Streamlit viewer (with live Chronos-2 runs)
+docs/                     static web viewer published on GitHub Pages
 tests/                    unit tests for labels, probabilities and scores
 outputs/metrics/          score tables (CSV, JSON)
 outputs/figures/          report figures and app screenshots
