@@ -1,0 +1,47 @@
+{
+ "Chronos-2+cov": {
+  "t_watch": 0.3,
+  "t_alert": 0.25,
+  "t_severe": 0.5
+ },
+ "Chronos-2+cov+RH": {
+  "t_watch": 0.25,
+  "t_alert": 0.25,
+  "t_severe": 0.5
+ },
+ "Chronos-2": {
+  "t_watch": 0.25,
+  "t_alert": 0.2,
+  "t_severe": 0.5
+ },
+ "Chronos-Bolt": {
+  "t_watch": 0.3,
+  "t_alert": 0.4,
+  "t_severe": 0.5
+ },
+ "Chronos-T5": {
+  "t_watch": 0.2,
+  "t_alert": 0.35,
+  "t_severe": 0.5
+ },
+ "Quantile-LSTM": {
+  "t_watch": 0.25,
+  "t_alert": 0.35,
+  "t_severe": 0.5
+ },
+ "AR-anomaly": {
+  "t_watch": 0.25,
+  "t_alert": 0.2,
+  "t_severe": 0.5
+ },
+ "Persistence": {
+  "t_watch": 0.45,
+  "t_alert": 0.6,
+  "t_severe": 0.5
+ },
+ "Climatology": {
+  "t_watch": 0.1,
+  "t_alert": 0.1,
+  "t_severe": 0.5
+ }
+}

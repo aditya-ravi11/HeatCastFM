@@ -1,0 +1,23 @@
+# environment
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+
+# large or regenerable data
+data/
+logs/
+outputs/predictions/
+outputs/chronos2_lora/
+outputs/metrics/*.parquet
+outputs/metrics/localization_long.csv
+chronos-2-finetuned/
+
+# LaTeX build files
+report/*.aux
+report/*.log
+report/*.out
+report/*.blg
+report/*.bbl
+report/main.pdf

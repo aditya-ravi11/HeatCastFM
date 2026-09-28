@@ -1,0 +1,42 @@
+[
+ {
+  "epoch": 1,
+  "train_last_batch": 0.43590059876441956,
+  "val_pinball": 0.44384569525718687
+ },
+ {
+  "epoch": 2,
+  "train_last_batch": 0.4341537356376648,
+  "val_pinball": 0.4342240452766418
+ },
+ {
+  "epoch": 3,
+  "train_last_batch": 0.4150840640068054,
+  "val_pinball": 0.4320263385772705
+ },
+ {
+  "epoch": 4,
+  "train_last_batch": 0.39794981479644775,
+  "val_pinball": 0.43451623916625975
+ },
+ {
+  "epoch": 5,
+  "train_last_batch": 0.40633684396743774,
+  "val_pinball": 0.4356632769107819
+ },
+ {
+  "epoch": 6,
+  "train_last_batch": 0.39176416397094727,
+  "val_pinball": 0.43989322781562806
+ },
+ {
+  "epoch": 7,
+  "train_last_batch": 0.3953057527542114,
+  "val_pinball": 0.4444400370121002
+ },
+ {
+  "epoch": 8,
+  "train_last_batch": 0.3999785780906677,
+  "val_pinball": 0.4426069498062134
+ }
+]

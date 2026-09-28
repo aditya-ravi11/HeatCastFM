@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering
+\caption{Event probability skill over all 43 series, leads 1-3, test seasons (10,867 hot-day and 684 heatwave forecast-observation pairs out of 94,428). BSS is relative to climatology.}
+\label{tab:eventskill}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\fitbox{%
+\begin{tabular}{lrrrrrr}
+\toprule
+Model & BS hot & BSS hot & AUC hot & BS HW & BSS HW & AUC HW \\
+\midrule
+Chronos-2+cov & 0.0726 & 0.285 & 0.888 & 0.0062 & 0.112 & 0.964 \\
+Chronos-2 & 0.0731 & 0.281 & 0.886 & 0.0065 & 0.079 & 0.974 \\
+Chronos-Bolt & 0.0732 & 0.280 & 0.895 & 0.0085 & -0.208 & 0.982 \\
+Quantile-LSTM & 0.0667 & \textbf{0.344} & 0.910 & 0.0057 & \textbf{0.183} & \textbf{0.983} \\
+AR-anomaly & 0.0714 & 0.297 & 0.903 & 0.0060 & 0.142 & 0.976 \\
+Persistence & 0.0735 & 0.277 & \textbf{0.912} & 0.0100 & -0.416 & 0.982 \\
+\bottomrule
+\end{tabular}}
+\end{table}

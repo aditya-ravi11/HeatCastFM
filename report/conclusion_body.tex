@@ -1,0 +1,19 @@
+HeatCast-FM shows that pretrained time-series foundation models can serve as the forecasting core of a regional heatwave warning system without any training on Indian data. Used zero-shot on IMD gridded Tmax, Chronos-2 with covariates gave 7-day probabilistic forecasts about 17\% better than climatology on CRPS. Its hot-day probabilities were reliable, and its heatwave ROC area was above 0.96. Models trained on 64 years of local data were still about 6\% better, with the gap growing with lead time. On this evidence, a foundation model is a good starting point for places or variables with short records. Where long local records exist, a well-built statistical or LSTM model remains hard to beat.
+
+For the use case, the work delivers:
+\begin{itemize}
+\item a reproducible pipeline from IMD data to colour warnings;
+\item a way to turn any quantile forecast into IMD rule probabilities for both coastal and plains stations;
+\item a tested point correction that roughly halved the point error at Mumbai and Ratnagiri;
+\item evidence that the Tmax-only rule misses many humid heat days on the Konkan coast;
+\item a small viewer app that shows the 7-day forecast, event probabilities and warning level for any region and date.
+\end{itemize}
+
+Future work:
+\begin{itemize}
+\item replace the station proxy with the planned IoT weather stations and repeat the point validation;
+\item complete the LoRA fine-tuning of Chronos-2 on a GPU;
+\item calibrate the Chronos intervals on validation years, since they are too narrow;
+\item test station data or finer temperature grids, where the official heatwave rule can be applied as intended;
+\item add a humidity-aware warning level once IMD publishes its revised criteria.
+\end{itemize}

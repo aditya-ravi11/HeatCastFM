@@ -1,0 +1,27 @@
+% HeatCast-FM pipeline diagram
+\begin{tikzpicture}[
+  node distance=3.5mm and 3mm,
+  box/.style={draw=black!60, rounded corners=1.5pt, align=center, font=\scriptsize, inner sep=3pt, minimum height=8mm, text width=22mm, fill=white},
+  databox/.style={box, fill=blue!6},
+  modelbox/.style={box, fill=orange!8},
+  outbox/.style={box, fill=green!7},
+  arr/.style={-{Stealth[length=1.6mm]}, draw=black!60, line width=0.5pt}
+]
+\node[databox] (imd) {IMD 1\textdegree{} gridded Tmax, Tmin\\1951--2024};
+\node[databox, below=of imd] (om) {Station proxy (Open-Meteo)\\Tmax, RH at city points};
+\node[box, right=of imd] (lab) {Normals 1981--2010\\IMD heatwave rule\\hot-day threshold};
+\node[box, right=of om] (cov) {Covariates\\Tmin, RH, season,\\normal Tmax};
+\node[modelbox, right=of lab, yshift=-6mm] (fm) {Chronos-2 / Bolt / T5\\zero-shot, 7-day\\quantiles or samples};
+\node[box, right=of fm] (prob) {Exceedance\\probabilities\\P(hot), P(HW), P(severe)};
+\node[outbox, right=of prob, yshift=6mm] (warn) {Colour warning\\Green to Red};
+\node[outbox, right=of prob, yshift=-8mm] (loc) {Point correction\\and validation\\(AWS ready)};
+\draw[arr] (imd) -- (lab);
+\draw[arr] (om) -- (cov);
+\draw[arr] (imd.east) ++(0,-2mm) -- ++(1.5mm,0) |- (cov.west);
+\draw[arr] (lab.east) -- (fm.west |- lab.east);
+\draw[arr] (cov.east) -- (fm.west |- cov.east);
+\draw[arr] (fm) -- (prob);
+\draw[arr] (prob.east) -- (warn.west);
+\draw[arr] (prob.east) -- (loc.west);
+\draw[arr, dashed] (om.south) -- ++(0,-3mm) -| (loc.south);
+\end{tikzpicture}

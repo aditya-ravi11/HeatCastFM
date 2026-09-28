@@ -1,0 +1,21 @@
+\begin{table*}[t]
+\centering
+\caption{Tmax forecast skill over all 43 series, test seasons 2019-2024, leads 1-7 pooled (deg C). CRPSS is relative to climatology. Cov80 is the share of observations inside the 10-90\% interval (target 0.80). Best value in bold.}
+\label{tab:continuous}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\fitbox{%
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+Model & MAE & RMSE & CRPS & CRPSS & Cov80 & Width80 & CRPS d1 & CRPS d3 & CRPS d7 \\
+\midrule
+Chronos-2+cov & 1.375 & 1.861 & 0.988 & 0.173 & 0.75 & 3.89 & 0.616 & 0.967 & 1.179 \\
+Chronos-2 & 1.379 & 1.876 & 0.989 & 0.172 & 0.77 & 4.19 & 0.614 & 0.962 & 1.197 \\
+Chronos-Bolt & 1.422 & 1.965 & 1.019 & 0.147 & 0.78 & 4.32 & 0.603 & 0.974 & 1.274 \\
+Quantile-LSTM & \textbf{1.299} & 1.807 & \textbf{0.935} & \textbf{0.217} & 0.78 & 3.85 & 0.606 & \textbf{0.921} & \textbf{1.099} \\
+AR-anomaly & 1.315 & \textbf{1.767} & 0.943 & 0.211 & 0.82 & 4.32 & \textbf{0.593} & 0.932 & 1.112 \\
+Persistence & 1.468 & 2.036 & 1.063 & 0.110 & 0.80 & 4.64 & 0.602 & 1.020 & 1.325 \\
+Climatology & 1.690 & 2.234 & 1.194 & 0.000 & 0.77 & 5.00 & 1.188 & 1.193 & 1.197 \\
+\bottomrule
+\end{tabular}}
+\end{table*}

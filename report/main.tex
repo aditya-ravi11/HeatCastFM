@@ -1,0 +1,166 @@
+\documentclass[conference,10pt]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,calc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\makeatletter\g@addto@macro\UrlBreaks{\UrlOrds}\makeatother
+\graphicspath{{../outputs/figures/}}
+
+\input{results_macros.tex}
+% shrink a table to the line width only when it is wider
+\newsavebox{\fitboxbin}
+\newcommand{\fitbox}[1]{\sbox{\fitboxbin}{#1}\ifdim\wd\fitboxbin>\linewidth\resizebox{\linewidth}{!}{\usebox{\fitboxbin}}\else\usebox{\fitboxbin}\fi}
+
+\begin{document}
+
+\title{HeatCast-FM: Probabilistic Heatwave Early Warning for Mumbai-Pune using Generative Time-Series Foundation Models}
+
+\author{\IEEEauthorblockN{Aditya Ravi}
+\IEEEauthorblockA{Department of Information Technology (AI \& DS)\\
+K. J. Somaiya College of Engineering, Mumbai\\
+Roll No. 16014223004\\
+aditya.ravi@somaiya.edu}
+\and
+\IEEEauthorblockN{Dirshak Deep Patro}
+\IEEEauthorblockA{Department of Information Technology (AI \& DS)\\
+K. J. Somaiya College of Engineering, Mumbai\\
+Roll No. 16014223033\\
+dirshak.p@somaiya.edu}}
+
+\maketitle
+
+{\small\bfseries\noindent\textit{Abstract:}\ IMD issues heatwave warnings with station rules. Plains stations need Tmax of at least 40\,\textdegree C and a departure of at least 4.5\,\textdegree C from normal. Coastal stations need at least 37\,\textdegree C. We test whether pretrained time-series foundation models, used without any training on Indian data, can serve as the forecasting core of a region-specific warning system for the IMD Mumbai-Pune region.
+
+HeatCast-FM runs Chronos, Chronos-Bolt and Chronos-2 on IMD 1\textdegree{} gridded Tmax for 7 Maharashtra cities and 36 inland cells. It issues a 7-day forecast every day of March-June and converts each one into probabilities of a hot day (Tmax above its local 90th percentile), an IMD heatwave and a severe heatwave, and then into Green-to-Red warnings. We compare these models with persistence, climatology, an autoregressive model and a quantile LSTM trained on 1951-2014.
+
+Over \NTestForecasts{} test forecasts from 2019-2024, Chronos-2 with covariates reached a CRPS of \CRPSChronostwocov\,\textdegree C, against \CRPSClimatology{} for climatology and \CRPSPersistence{} for persistence. The trained LSTM remained best at \CRPSQuantileLSTM\,\textdegree C. The gap between them was small at a 1-day lead and grew with lead time. All models separated heatwave days well (AUC 0.96-0.98). Chronos intervals were too narrow.
+
+A point correction against city-level data, which stands in for IoT weather stations, roughly halved the error at the coast. At Mumbai the heat index passed the NOAA Danger level on \HumidMumbai{} March-June days in 1991-2024 that the Tmax rule did not flag, against \TmaxhwMumbai{} Tmax-rule heatwave days.
+\par}\smallskip
+
+{\small\bfseries\noindent\textit{Index Terms:}\ heatwave, early warning, time-series foundation model, Chronos, probabilistic forecasting, IMD, Maharashtra
+\par}\medskip
+
+\section{Introduction}
+Heatwaves in India have grown longer and more frequent over the central and northwestern parts of the country \cite{rohini2016heat,pai2013heat}. They reduce labour capacity, raise hospital admissions and stress power and water supply. IMD issues district-level heatwave warnings using station criteria \cite{imdfaq}. The criteria differ for plains, coastal and hill stations, so a single temperature does not mean the same thing everywhere. For example, 38\,\textdegree C in early March can meet the heatwave rule in Mumbai, while in May it is an ordinary afternoon in Nagpur.
+
+The use case KJS-CES-01 asks for region-wise maximum temperature forecasts, heatwave prediction and severity classification, and validation against ground observations. Recent work in India has trained machine learning models for this task station by station or city by city \cite{ratnam2023ml,khan2022hybrid,choudary2025compare}. These models need long training records, retraining for each new location, and care to avoid overfitting to a few extreme seasons.
+
+Time-series foundation models offer a different route. Chronos \cite{ansari2024chronos} scales and quantizes a series into tokens and trains a T5 language model \cite{raffel2020t5} on them. It then generates future values by sampling tokens, which gives a set of possible futures rather than one number. Chronos-Bolt emits quantiles directly. Chronos-2 \cite{ansari2025chronos2} adds group attention so that covariates and related series can inform the forecast. All three are used here zero-shot: they see the recent temperature history at forecast time and are never trained on Indian data.
+
+This work makes four contributions:
+\begin{enumerate}
+\item A rolling-origin benchmark of three Chronos models against four trained or statistical baselines on \NSeries{} Maharashtra series for the March-June seasons of 2015-2024.
+\item A conversion from quantile forecasts to IMD rule probabilities that handles plains and coastal criteria in one formula. We also give a colour warning scheme tuned on held-out years.
+\item A point validation step (Objective 3 of the use case). It compares grid forecasts with city-point data and ships a loader for real AWS files.
+\item An analysis of humid heat at the Konkan coast that the Tmax-only rule misses.
+\end{enumerate}
+
+\section{Related Work}
+\textbf{Heatwave climatology in India.} Pai et al. \cite{pai2013heat} built a 50-year station climatology of heatwaves and found rising frequency over much of the country. Rohini et al. \cite{rohini2016heat} used IMD gridded temperature \cite{srivastava2009grid} with a 90th percentile definition and linked heatwave variability to Indian Ocean and Pacific sea surface temperatures. We use the same gridded product and a 90th percentile hot-day event alongside the IMD rule.
+
+\textbf{Machine learning forecasts.} Ratnam et al. \cite{ratnam2023ml} compared ten machine learning regressors for 10-day Tmax anomaly forecasts over India in March-June. Khan and Maity \cite{khan2022hybrid} combined convolutional and LSTM layers for multi-step Tmax prediction in 28 Indian cities. Choudary et al. \cite{choudary2025compare} compared tree ensembles, CNNs, LSTMs and Transformers for heatwave prediction in Tamil Nadu and found tree ensembles strong at short range. All of these train on the target region.
+
+\textbf{Time-series foundation models.} TimesFM \cite{das2024timesfm} is a decoder-only model trained on about 100 billion time points. Moirai \cite{woo2024moirai} is a masked encoder trained on 27 billion observations. Chronos \cite{ansari2024chronos} and Chronos-2 \cite{ansari2025chronos2} come from Amazon. We did not find published work that tests these models on Indian heatwave forecasting, which is the gap this project addresses.
+
+\textbf{Verification.} We score probabilistic forecasts with the continuous ranked probability score (CRPS), a strictly proper score \cite{gneiting2007scoring}, and event probabilities with the Brier score \cite{brier1950}.
+
+\section{Study Area and Data}
+\subsection{Regions}
+Table~\ref{tab:regions} lists the seven focus regions. Mumbai and Ratnagiri use the IMD coastal rule, and the rest use the plains rule. For each city we take the nearest IMD 1\textdegree{} cell with at least 95\% valid days. To obtain enough events for verification we also include all 36 inland cells between 16.5-21.5\textdegree N and 74.5-79.5\textdegree E. These cover interior Maharashtra and small parts of the neighbouring states. In total there are \NSeries{} series.
+
+\input{tab_regions.tex}
+
+\subsection{Data sources}
+\textbf{IMD gridded temperature.} Daily Tmax and Tmin on a 1\textdegree{} grid for 1951-2024 were downloaded with IMDLIB \cite{nandi2024imdlib}. The grid is built from about 395 quality-controlled stations using Shepard's angular distance weighting \cite{srivastava2009grid}.
+
+\textbf{Station proxy.} The project has no AWS readings yet. As a stand-in we use daily Tmax, Tmin, mean and minimum relative humidity for 1990-2024 at the exact city coordinates from the Open-Meteo archive \cite{zippenfenig2024openmeteo}, which is based on ERA5 reanalysis \cite{hersbach2020era5}. A loader for real AWS files (timestamp, temperature, humidity) applies range and step checks, drops days with less than 75\% coverage and writes the same daily fields. Real stations can therefore replace the proxy without code changes.
+
+\subsection{Event definitions}
+Normals are the 1981-2010 day-of-year mean, smoothed with a 31-day circular window. This period keeps all validation and test years out of the baseline. Because departure equals Tmax minus normal, each IMD rule reduces to a single Tmax threshold for each day:
+\begin{align}
+\theta^{\text{HW}}_{\text{plains}} &= \min\{\max(40,\ N+4.5),\ 45\},\\
+\theta^{\text{SEV}}_{\text{plains}} &= \min\{\max(40,\ N+6.5),\ 47\},\\
+\theta^{\text{HW}}_{\text{coast}} &= \max(37,\ N+4.5),
+\end{align}
+where $N$ is the daily normal. IMD gives no separate severe rule for coastal stations, so we use $\max(37, N+6.5)$ there. A day is a heatwave day if Tmax $\ge \theta^{\text{HW}}$ and severe if Tmax $\ge \theta^{\text{SEV}}$.
+
+On a 1\textdegree{} grid, averaging across each cell smooths out station extremes. As a result the IMD rule fires rarely: \NHWTest{} heatwave days and \NSevTest{} severe days across all \NSeries{} series in the 2019-2024 test seasons, and none at the Mumbai or Pune cells. We therefore add a second event, the \emph{hot day}. It occurs when Tmax exceeds the 1981-2010 90th percentile for that calendar window ($\pm$7 days), following Rohini et al. \cite{rohini2016heat}. It has a 9.5\% base rate in the reference period and \HotRateTest{} in the test seasons, so it can be verified at every region.
+
+\input{tab_events.tex}
+
+\section{Methodology}
+Fig.~\ref{fig:pipeline} shows the pipeline.
+
+\begin{figure*}[t]
+\centering
+\resizebox{\textwidth}{!}{\input{pipeline.tex}}
+\caption{HeatCast-FM pipeline. Gridded IMD data and point data feed labels and covariates. Chronos models produce 7-day quantile or sample forecasts, which become event probabilities, colour warnings and point-corrected forecasts.}
+\label{fig:pipeline}
+\end{figure*}
+
+\subsection{Forecast setup}
+A forecast is issued on every day from 1 March to 30 June. It uses the previous 512 days of data and predicts days 1 to 7. Years 1951-2014 are for training (baselines only), 2015-2018 for validation (warning thresholds, LSTM early stopping) and 2019-2024 for testing. Each season gives 122 issue dates per series, so the test set has \NTestForecasts{} forecasts and \NTestPairs{} forecast-observation pairs per model. Every model stores its forecast as 21 quantiles (levels 0.01, 0.05, 0.10, ..., 0.95, 0.99).
+
+\subsection{Models}
+\textbf{Persistence.} Tomorrow equals today, with the empirical distribution of training-period changes for each series, lead and month.
+
+\textbf{Climatology.} The daily normal plus the distribution of anomalies seen within $\pm$15 days of the target date in 1985-2014.
+
+\textbf{AR-anomaly.} An autoregressive model on daily anomalies. The order (up to 14) is chosen by AIC for each series. It gives Gaussian predictive intervals from the psi weights and a hot-season residual variance.
+
+\textbf{Quantile-LSTM.} A two-layer LSTM \cite{hochreiter1997lstm} with 64 hidden units. Its inputs are 60 days of Tmax and Tmin anomalies with the sine and cosine of day of year. It outputs 7$\times$21 anomaly quantiles, is trained with the pinball loss on all series for 1951-2014, and uses early stopping on 2015-2018.
+
+\textbf{Chronos-T5 (small, 46M).} This is the generative model. The context is mean-scaled and quantized into 4096 bins. A T5 encoder-decoder then samples the next token one day at a time, and we draw \TFiveSamples{} sample paths. Because of its cost it was run on the 7 focus regions only. We also rewrote the sampling loop so that the encoder runs once per series instead of once per sample.
+
+\textbf{Chronos-Bolt (small).} Encodes patches of the context and emits 9 quantiles (0.1-0.9) for all steps at once. We extend these to our 21 levels with exponential tails fitted to the outer quantiles.
+
+\textbf{Chronos-2 (120M).} An encoder-only model with group attention that emits 21 quantiles. We test three input sets:
+\begin{itemize}
+\item Tmax only.
+\item \emph{+cov}: past Tmin and the normal Tmax, plus sine and cosine of day of year, where the normal and season terms are also given for the 7 target days as known future covariates.
+\item \emph{+cov+RH}: the same with past relative humidity from the station proxy (focus regions only).
+\end{itemize}
+
+None of the Chronos models were fine-tuned.
+
+\subsection{From quantiles to warnings}
+For quantiles $q_1<\dots<q_{21}$ at levels $\tau_k$ we build a CDF $\hat F$ by linear interpolation. Beyond the outermost quantiles we use exponential tails matched to the two outermost quantiles on each side. The event probability is then $p=1-\hat F(\theta)$, where $\theta$ is the day's threshold for the hot-day, heatwave or severe event. For Chronos-T5 we can also count the share of sample paths above $\theta$. Both give almost the same result (Section~\ref{sec:results}).
+
+The warning level for each target day is:
+\begin{itemize}
+\item \textbf{Yellow} (heat watch) if $p_{\text{hot}}\ge t_w$
+\item \textbf{Orange} (heatwave alert) if $p_{\text{HW}}\ge t_a$
+\item \textbf{Red} if $p_{\text{SEV}}\ge 0.5$
+\end{itemize}
+$t_w$ and $t_a$ maximise the critical success index (CSI) on 2015-2018 for leads 1-3. They are set separately for each model.
+
+\subsection{Point validation and correction}
+For each focus region and month we fit $T_{\text{point}}=a+b\,T_{\text{grid}}$ on 1990-2014 observations. The fitted map shifts and scales the grid forecast median. The spread is widened by the regression residual. Scores are then computed against the city-point Tmax, with IMD labels built from point normals.
+
+\subsection{Humid heat}
+For Mumbai, Ratnagiri and inland Pune we compute the NOAA heat index \cite{rothfusz1990} from point Tmax and minimum relative humidity. Minimum humidity approximates the humidity at the time of Tmax. We then count the March-June days in 1991-2024 on which the heat index reached the NOAA Danger level (39.4\,\textdegree C, 103\,\textdegree F) but the Tmax heatwave rule was not met.
+
+\section{Results}\label{sec:results}
+\input{results_body.tex}
+
+\section{Discussion}\label{sec:discussion}
+\input{discussion_body.tex}
+
+\section{Conclusion and Future Work}
+\input{conclusion_body.tex}
+
+\section*{Code and Data Availability}
+All code, configuration, metric tables and figures are available at \url{https://github.com/aditya-ravi11/HeatCastFM}. The script \texttt{scripts/run\_all.sh} downloads the data and reproduces every table and figure. The viewer app runs with \texttt{streamlit run app/streamlit\_app.py}.
+
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}

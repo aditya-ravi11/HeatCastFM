@@ -1,0 +1,7 @@
+{
+ "steps": 300,
+ "batch_size": 32,
+ "lr": 1e-05,
+ "mode": "lora",
+ "minutes": 429.78626763423284
+}

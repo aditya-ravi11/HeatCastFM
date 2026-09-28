@@ -1,0 +1,23 @@
+\begin{table*}[t]
+\centering
+\caption{Warning verification at the 7 focus regions, leads 1-3, test seasons. Thresholds $t_w$ and $t_a$ were tuned for best CSI on 2015-2018. Yellow is checked against hot days, Orange against IMD heatwave days.}
+\label{tab:warnings}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\fitbox{%
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Model & $t_w$ & POD & FAR & CSI & $t_a$ & POD & FAR & CSI \\
+\midrule
+Chronos-2+cov & 0.30 & 0.56 & 0.46 & 0.38 & 0.25 & 0.20 & 0.60 & 0.15 \\
+Chronos-2+cov+RH & 0.25 & 0.67 & 0.51 & 0.39 & 0.25 & 0.32 & 0.64 & 0.21 \\
+Chronos-2 & 0.25 & 0.66 & 0.52 & 0.39 & 0.20 & 0.66 & 0.68 & 0.27 \\
+Chronos-Bolt & 0.30 & 0.70 & 0.52 & 0.40 & 0.40 & 0.69 & 0.65 & 0.30 \\
+Chronos-T5 & 0.20 & 0.75 & 0.59 & 0.36 & 0.35 & 0.71 & 0.66 & 0.30 \\
+Quantile-LSTM & 0.25 & 0.72 & 0.53 & 0.40 & 0.35 & 0.27 & 0.57 & 0.20 \\
+AR-anomaly & 0.25 & 0.64 & 0.49 & 0.40 & 0.20 & 0.46 & 0.62 & 0.26 \\
+Persistence & 0.45 & 0.64 & 0.46 & 0.41 & 0.60 & 0.36 & 0.49 & 0.27 \\
+Climatology & 0.10 & 0.64 & 0.83 & 0.16 & 0.10 & 0.11 & 0.94 & 0.04 \\
+\bottomrule
+\end{tabular}}
+\end{table*}

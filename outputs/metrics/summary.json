@@ -1,0 +1,358 @@
+{
+ "all": {
+  "continuous": {
+   "MAE": {
+    "Chronos-2+cov": 1.3753999471664429,
+    "Chronos-2": 1.3791999816894531,
+    "Chronos-Bolt": 1.4222999811172485,
+    "Quantile-LSTM": 1.299299955368042,
+    "AR-anomaly": 1.3144999742507935,
+    "Persistence": 1.468400001525879,
+    "Climatology": 1.6900999546051025
+   },
+   "RMSE": {
+    "Chronos-2+cov": 1.860700011253357,
+    "Chronos-2": 1.8760000467300415,
+    "Chronos-Bolt": 1.9651000499725342,
+    "Quantile-LSTM": 1.8069000244140625,
+    "AR-anomaly": 1.7669999599456787,
+    "Persistence": 2.035900115966797,
+    "Climatology": 2.234299898147583
+   },
+   "CRPS": {
+    "Chronos-2+cov": 0.9877,
+    "Chronos-2": 0.9894,
+    "Chronos-Bolt": 1.0193,
+    "Quantile-LSTM": 0.9352,
+    "AR-anomaly": 0.9428,
+    "Persistence": 1.0634,
+    "Climatology": 1.1945
+   },
+   "Cov80": {
+    "Chronos-2+cov": 0.7507,
+    "Chronos-2": 0.7688,
+    "Chronos-Bolt": 0.7789,
+    "Quantile-LSTM": 0.7755,
+    "AR-anomaly": 0.8234,
+    "Persistence": 0.7975,
+    "Climatology": 0.7679
+   },
+   "Width80": {
+    "Chronos-2+cov": 3.887700080871582,
+    "Chronos-2": 4.194399833679199,
+    "Chronos-Bolt": 4.32420015335083,
+    "Quantile-LSTM": 3.845099925994873,
+    "AR-anomaly": 4.322500228881836,
+    "Persistence": 4.642099857330322,
+    "Climatology": 5.002699851989746
+   },
+   "n": {
+    "Chronos-2+cov": 220332,
+    "Chronos-2": 220332,
+    "Chronos-Bolt": 220332,
+    "Quantile-LSTM": 220332,
+    "AR-anomaly": 220332,
+    "Persistence": 220332,
+    "Climatology": 220332
+   },
+   "CRPSS": {
+    "Chronos-2+cov": 0.1731,
+    "Chronos-2": 0.1717,
+    "Chronos-Bolt": 0.1467,
+    "Quantile-LSTM": 0.2171,
+    "AR-anomaly": 0.2107,
+    "Persistence": 0.1098,
+    "Climatology": 0.0
+   }
+  },
+  "events_hw": {
+   "Brier": {
+    "Chronos-2+cov": 0.0062,
+    "Chronos-2": 0.0065,
+    "Chronos-Bolt": 0.0085,
+    "Quantile-LSTM": 0.0057,
+    "AR-anomaly": 0.006,
+    "Persistence": 0.01,
+    "Climatology": 0.007
+   },
+   "BSS": {
+    "Chronos-2+cov": 0.1118,
+    "Chronos-2": 0.079,
+    "Chronos-Bolt": -0.2079,
+    "Quantile-LSTM": 0.1826,
+    "AR-anomaly": 0.142,
+    "Persistence": -0.4165,
+    "Climatology": 0.0
+   },
+   "AUC": {
+    "Chronos-2+cov": 0.9643,
+    "Chronos-2": 0.9739,
+    "Chronos-Bolt": 0.9821,
+    "Quantile-LSTM": 0.9832,
+    "AR-anomaly": 0.9756,
+    "Persistence": 0.9815,
+    "Climatology": 0.908
+   },
+   "events": {
+    "Chronos-2+cov": 684,
+    "Chronos-2": 684,
+    "Chronos-Bolt": 684,
+    "Quantile-LSTM": 684,
+    "AR-anomaly": 684,
+    "Persistence": 684,
+    "Climatology": 684
+   },
+   "n": {
+    "Chronos-2+cov": 94428,
+    "Chronos-2": 94428,
+    "Chronos-Bolt": 94428,
+    "Quantile-LSTM": 94428,
+    "AR-anomaly": 94428,
+    "Persistence": 94428,
+    "Climatology": 94428
+   }
+  },
+  "events_p90": {
+   "Brier": {
+    "Chronos-2+cov": 0.0726,
+    "Chronos-2": 0.0731,
+    "Chronos-Bolt": 0.0732,
+    "Quantile-LSTM": 0.0667,
+    "AR-anomaly": 0.0714,
+    "Persistence": 0.0735,
+    "Climatology": 0.1016
+   },
+   "BSS": {
+    "Chronos-2+cov": 0.2853,
+    "Chronos-2": 0.2808,
+    "Chronos-Bolt": 0.2797,
+    "Quantile-LSTM": 0.3438,
+    "AR-anomaly": 0.2973,
+    "Persistence": 0.2765,
+    "Climatology": 0.0
+   },
+   "AUC": {
+    "Chronos-2+cov": 0.8877,
+    "Chronos-2": 0.8862,
+    "Chronos-Bolt": 0.895,
+    "Quantile-LSTM": 0.9098,
+    "AR-anomaly": 0.9032,
+    "Persistence": 0.9124,
+    "Climatology": 0.565
+   },
+   "events": {
+    "Chronos-2+cov": 10867,
+    "Chronos-2": 10867,
+    "Chronos-Bolt": 10867,
+    "Quantile-LSTM": 10867,
+    "AR-anomaly": 10867,
+    "Persistence": 10867,
+    "Climatology": 10867
+   },
+   "n": {
+    "Chronos-2+cov": 94428,
+    "Chronos-2": 94428,
+    "Chronos-Bolt": 94428,
+    "Quantile-LSTM": 94428,
+    "AR-anomaly": 94428,
+    "Persistence": 94428,
+    "Climatology": 94428
+   }
+  }
+ },
+ "focus": {
+  "continuous": {
+   "MAE": {
+    "Chronos-2+cov": 1.2795000076293945,
+    "Chronos-2+cov+RH": 1.2563999891281128,
+    "Chronos-2": 1.2783000469207764,
+    "Chronos-Bolt": 1.3294999599456787,
+    "Chronos-T5": 1.3835999965667725,
+    "Quantile-LSTM": 1.2171000242233276,
+    "AR-anomaly": 1.2409000396728516,
+    "Persistence": 1.3880000114440918,
+    "Climatology": 1.580899953842163
+   },
+   "RMSE": {
+    "Chronos-2+cov": 1.767799973487854,
+    "Chronos-2+cov+RH": 1.7524000406265259,
+    "Chronos-2": 1.7800999879837036,
+    "Chronos-Bolt": 1.876099944114685,
+    "Chronos-T5": 1.9342000484466553,
+    "Quantile-LSTM": 1.7134000062942505,
+    "AR-anomaly": 1.6857999563217163,
+    "Persistence": 1.9493999481201172,
+    "Climatology": 2.1047000885009766
+   },
+   "CRPS": {
+    "Chronos-2+cov": 0.9206,
+    "Chronos-2+cov+RH": 0.9067,
+    "Chronos-2": 0.921,
+    "Chronos-Bolt": 0.9569,
+    "Chronos-T5": 1.0161,
+    "Quantile-LSTM": 0.8791,
+    "AR-anomaly": 0.8881,
+    "Persistence": 1.0071,
+    "Climatology": 1.116
+   },
+   "Cov80": {
+    "Chronos-2+cov": 0.7622,
+    "Chronos-2+cov+RH": 0.7566,
+    "Chronos-2": 0.7761,
+    "Chronos-Bolt": 0.7895,
+    "Chronos-T5": 0.6835,
+    "Quantile-LSTM": 0.7947,
+    "AR-anomaly": 0.8122,
+    "Persistence": 0.7969,
+    "Climatology": 0.7593
+   },
+   "Width80": {
+    "Chronos-2+cov": 3.6619999408721924,
+    "Chronos-2+cov+RH": 3.5759999752044678,
+    "Chronos-2": 3.9163999557495117,
+    "Chronos-Bolt": 4.087200164794922,
+    "Chronos-T5": 3.500499963760376,
+    "Quantile-LSTM": 3.790800094604492,
+    "AR-anomaly": 3.9702000617980957,
+    "Persistence": 4.360499858856201,
+    "Climatology": 4.641600131988525
+   },
+   "n": {
+    "Chronos-2+cov": 35868,
+    "Chronos-2+cov+RH": 35868,
+    "Chronos-2": 35868,
+    "Chronos-Bolt": 35868,
+    "Chronos-T5": 35868,
+    "Quantile-LSTM": 35868,
+    "AR-anomaly": 35868,
+    "Persistence": 35868,
+    "Climatology": 35868
+   },
+   "CRPSS": {
+    "Chronos-2+cov": 0.1751,
+    "Chronos-2+cov+RH": 0.1876,
+    "Chronos-2": 0.1748,
+    "Chronos-Bolt": 0.1426,
+    "Chronos-T5": 0.0896,
+    "Quantile-LSTM": 0.2123,
+    "AR-anomaly": 0.2043,
+    "Persistence": 0.0976,
+    "Climatology": 0.0
+   }
+  },
+  "events_hw": {
+   "Brier": {
+    "Chronos-2+cov": 0.0057,
+    "Chronos-2+cov+RH": 0.0056,
+    "Chronos-2": 0.0055,
+    "Chronos-Bolt": 0.0069,
+    "Chronos-T5": 0.0071,
+    "Quantile-LSTM": 0.0051,
+    "AR-anomaly": 0.0054,
+    "Persistence": 0.0083,
+    "Climatology": 0.0066
+   },
+   "BSS": {
+    "Chronos-2+cov": 0.141,
+    "Chronos-2+cov+RH": 0.1541,
+    "Chronos-2": 0.1659,
+    "Chronos-Bolt": -0.0323,
+    "Chronos-T5": -0.0647,
+    "Quantile-LSTM": 0.2258,
+    "AR-anomaly": 0.1862,
+    "Persistence": -0.2493,
+    "Climatology": 0.0
+   },
+   "AUC": {
+    "Chronos-2+cov": 0.9746,
+    "Chronos-2+cov+RH": 0.9794,
+    "Chronos-2": 0.9794,
+    "Chronos-Bolt": 0.9875,
+    "Chronos-T5": 0.9639,
+    "Quantile-LSTM": 0.9884,
+    "AR-anomaly": 0.9853,
+    "Persistence": 0.9872,
+    "Climatology": 0.9311
+   },
+   "events": {
+    "Chronos-2+cov": 105,
+    "Chronos-2+cov+RH": 105,
+    "Chronos-2": 105,
+    "Chronos-Bolt": 105,
+    "Chronos-T5": 105,
+    "Quantile-LSTM": 105,
+    "AR-anomaly": 105,
+    "Persistence": 105,
+    "Climatology": 105
+   },
+   "n": {
+    "Chronos-2+cov": 15372,
+    "Chronos-2+cov+RH": 15372,
+    "Chronos-2": 15372,
+    "Chronos-Bolt": 15372,
+    "Chronos-T5": 15372,
+    "Quantile-LSTM": 15372,
+    "AR-anomaly": 15372,
+    "Persistence": 15372,
+    "Climatology": 15372
+   }
+  },
+  "events_p90": {
+   "Brier": {
+    "Chronos-2+cov": 0.0885,
+    "Chronos-2+cov+RH": 0.087,
+    "Chronos-2": 0.0878,
+    "Chronos-Bolt": 0.088,
+    "Chronos-T5": 0.0912,
+    "Quantile-LSTM": 0.0815,
+    "AR-anomaly": 0.087,
+    "Persistence": 0.0884,
+    "Climatology": 0.1246
+   },
+   "BSS": {
+    "Chronos-2+cov": 0.2899,
+    "Chronos-2+cov+RH": 0.3015,
+    "Chronos-2": 0.2952,
+    "Chronos-Bolt": 0.2941,
+    "Chronos-T5": 0.2682,
+    "Quantile-LSTM": 0.3458,
+    "AR-anomaly": 0.3022,
+    "Persistence": 0.2906,
+    "Climatology": 0.0
+   },
+   "AUC": {
+    "Chronos-2+cov": 0.8719,
+    "Chronos-2+cov+RH": 0.8782,
+    "Chronos-2": 0.8729,
+    "Chronos-Bolt": 0.8815,
+    "Chronos-T5": 0.8662,
+    "Quantile-LSTM": 0.8952,
+    "AR-anomaly": 0.8884,
+    "Persistence": 0.8941,
+    "Climatology": 0.5851
+   },
+   "events": {
+    "Chronos-2+cov": 2232,
+    "Chronos-2+cov+RH": 2232,
+    "Chronos-2": 2232,
+    "Chronos-Bolt": 2232,
+    "Chronos-T5": 2232,
+    "Quantile-LSTM": 2232,
+    "AR-anomaly": 2232,
+    "Persistence": 2232,
+    "Climatology": 2232
+   },
+   "n": {
+    "Chronos-2+cov": 15372,
+    "Chronos-2+cov+RH": 15372,
+    "Chronos-2": 15372,
+    "Chronos-Bolt": 15372,
+    "Chronos-T5": 15372,
+    "Quantile-LSTM": 15372,
+    "AR-anomaly": 15372,
+    "Persistence": 15372,
+    "Climatology": 15372
+   }
+  }
+ }
+}

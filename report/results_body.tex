@@ -1,0 +1,140 @@
+\subsection{Events in the study period}
+Fig.~\ref{fig:thresholds} shows how the IMD rule plays out for three cities in 2019. At Mumbai the coastal threshold sits about 4.5\,\textdegree C above a normal of 35-36\,\textdegree C. At Pune the 40\,\textdegree C floor controls the threshold for most of the season. At Nagpur the threshold rises to the 45\,\textdegree C cap in May and early June, and the early June heat of 2019 crossed it. Table~\ref{tab:events} counts events over all \NSeries{} series. Hot days are common enough to verify at every region. IMD heatwave days are concentrated in Vidarbha, north Madhya Maharashtra and Marathwada, and most of them fall in 2019.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_thresholds.pdf}
+\caption{Daily normal (1981-2010), IMD heatwave and severe thresholds, and observed IMD gridded Tmax for March-June 2019 at three focus regions. The same Tmax means different things under the coastal and plains rules.}
+\label{fig:thresholds}
+\end{figure*}
+
+\subsection{Temperature forecast skill}
+Table~\ref{tab:continuous} and Fig.~\ref{fig:lead} compare the models on all \NSeries{} series. Key points:
+\begin{itemize}
+\item \textbf{Best overall:} the quantile LSTM had the lowest CRPS (\CRPSQuantileLSTM\,\textdegree C) and the AR model was close behind (\CRPSARanomaly).
+\item \textbf{Chronos, zero-shot:} Chronos-2+cov (\CRPSChronostwocov) and Chronos-2 (\CRPSChronostwo) were about 6\% worse than the LSTM. Chronos-Bolt was worse still (\CRPSChronosBolt).
+\item \textbf{Versus simple references:} all three were well ahead of persistence (\CRPSPersistence) and climatology (\CRPSClimatology).
+\item \textbf{Lead 1:} every model except climatology scored between 0.59 and 0.62\,\textdegree C.
+\item \textbf{Leads 3 and 7:} the zero-shot models fell behind (Chronos-2+cov \CRPSChronostwocovLthree{} and \CRPSChronostwocovLseven{}, against \CRPSQuantileLSTMLthree{} and \CRPSQuantileLSTMLseven{} for the LSTM).
+\end{itemize}
+
+A block bootstrap over region-years puts the CRPS difference between \BootFM{} and \BootBL{} at \BootCRPS{} (95\% interval \BootCRPSlo{} to \BootCRPShi). This gap is small but significant, and it grows from \BootCRPSleadone{} at lead 1 to \BootCRPSleadseven{} at lead 7.
+
+The Chronos models are overconfident. Their 80\% intervals held 75-78\% of observations, and Chronos-2+cov fell to about 72\% at longer leads (Fig.~\ref{fig:lead}, middle). The AR model was slightly too wide at short leads.
+
+\input{tab_continuous.tex}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_skill_by_lead.pdf}
+\caption{Skill against lead time over all 43 series, test seasons 2019-2024. Left: CRPS. Middle: share of observations inside the 80\% interval (dashed line is the target). Right: Brier skill score for the hot-day event, relative to climatology.}
+\label{fig:lead}
+\end{figure*}
+
+\textbf{Effect of covariates.} On the 2015-2018 validation years, adding covariates lowered Chronos-2's CRPS from \ValCRPSChronostwo{} to \ValCRPSChronostwocov{}. That put it ahead of the AR model (\ValCRPSARanomaly) but still behind the LSTM (\ValCRPSQuantileLSTM). In the test years the pooled gain almost vanished, because it came in \CovBetterYears{} of \CovYearsTotal{} years and was offset by a large loss in 2023 (Section~\ref{sec:discussion}).
+
+\subsection{Event probabilities}
+Table~\ref{tab:eventskill} scores the event probabilities for leads 1-3.
+
+\textbf{Hot days.} Every model beat climatology clearly on the hot-day event. The LSTM led (BSS \BSShotQuantileLSTM). Chronos-2+cov (\BSShotChronostwocov) was close to the AR model (\BSShotARanomaly).
+
+\textbf{IMD heatwaves.} Discrimination was high for all models (AUC 0.96-0.98). Brier skill was much lower because the events are rare, and it varied widely: Chronos-Bolt (\BSShwChronosBolt) and persistence (\BSShwPersistence) were worse than climatology. For Bolt, the exponential tails we added beyond its 0.9 quantile likely give too much weight to extreme values.
+
+\textbf{Calibration.} Fig.~\ref{fig:relroc} shows hot-day reliability and heatwave ROC curves. Chronos-2 slightly overforecasts at high probabilities. Chronos-2+cov and the LSTM stay closer to the diagonal.
+
+\input{tab_eventskill.tex}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.72\textwidth]{fig_reliability_roc.pdf}
+\caption{Left: reliability of hot-day probabilities. Right: ROC for IMD heatwave probabilities. Leads 1-3, all 43 series, test seasons.}
+\label{fig:relroc}
+\end{figure*}
+
+\subsection{Focus regions, humidity and generative sampling}
+Table~\ref{tab:focus} adds the three variants that were run only at the seven cities.
+
+\begin{itemize}
+\item \textbf{Humidity:} adding relative humidity to Chronos-2+cov lowered CRPS from \FocusCRPSChronostwocov{} to \FocusCRPSChronostwocovRH{}, the best Chronos result, though still behind the LSTM (\FocusCRPSQuantileLSTM).
+\item \textbf{Generative sampling:} Chronos-T5, with \TFiveSamples{} sample paths, scored \FocusCRPSChronosTfive{}, slightly worse than persistence (\FocusCRPSPersistence).
+\item \textbf{Samples versus quantiles:} for Chronos-T5, hot-day probabilities counted from the sample paths and read from the fitted quantiles agreed closely (correlation \TFiveCorr, Brier \TFiveBSsamp{} and \TFiveBSquant).
+\end{itemize}
+
+We also tried LoRA fine-tuning of Chronos-2+cov on the 1951-2014 series (rank 8, batch 32, context 512) but could not finish it on the laptop:
+\begin{itemize}
+\item \textbf{Apple GPU:} the first steps ran at about one per second, then slowed to about a minute per step.
+\item \textbf{CPU:} about 68 seconds per step, so 300 steps would take over five hours.
+\end{itemize}
+The script is included for a GPU run.
+
+\input{tab_focus.tex}
+
+\subsection{Warnings}
+Table~\ref{tab:warnings} scores the colour warnings at the focus regions, where every model is compared on the same forecasts.
+
+\begin{itemize}
+\item \textbf{Yellow (hot-day watch):} CSI 0.36-0.41 for all models except climatology. The trained and zero-shot models were close.
+\item \textbf{Orange (IMD heatwave alert):} Chronos-Bolt and Chronos-T5 had the highest CSI (\CSIorangeChronosBolt{} and \CSIorangeChronosTfive). They caught about 70\% of heatwave days at a false alarm ratio near 0.65. The LSTM had a lower FAR but missed most events. Its threshold, tuned on 2015-2018, was higher than the others (0.35).
+\item \textbf{Across all 43 series:} Orange CSI was \AllCSIorangeChronosBolt{} for Bolt, \AllCSIorangeChronostwo{} for Chronos-2, \AllCSIorangeARanomaly{} for AR and \AllCSIorangeQuantileLSTM{} for the LSTM.
+\item \textbf{Red:} with only \NSevPairs{} severe forecast-observation pairs in the test period, the Red level cannot be assessed.
+\end{itemize}
+
+\input{tab_warnings.tex}
+
+\subsection{Decision-support viewer}
+The forecasts and warnings are served through a small Streamlit viewer (Fig.~\ref{fig:app}), in line with Objective 4 of the use case. A user picks a region, a model and an issue date. The viewer shows:
+\begin{itemize}
+\item the past three weeks of Tmax with the 7-day forecast fan, the IMD heatwave threshold and the hot-day threshold;
+\item the overall warning colour for the week and the highest event probabilities;
+\item a day-by-day table of median, 80\% range, threshold, event probabilities and warning level, with the observed Tmax when the date is in the past.
+\end{itemize}
+Dates in the backtest load from the saved forecasts. Any other date triggers a live Chronos-2 run, which takes a few seconds on the laptop. Fig.~\ref{fig:app}(a) is the Nagpur forecast issued on 31 May 2019, one day before the heatwave: the viewer raised a Yellow heat watch with a 52\% chance of a hot day on 1 June, but gave the heatwave itself only 15\%, as discussed in the case studies. Fig.~\ref{fig:app}(b) is a quiet week at Mumbai in May 2024, where the coastal threshold of about 40.5\,\textdegree C was never in reach.
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{app/app_nagpur_2019.png}\\[1pt]
+{\footnotesize (a) Nagpur, issued 31 May 2019: Yellow heat watch}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.49\textwidth}\centering
+\includegraphics[width=\linewidth]{app/app_mumbai_2024.png}\\[1pt]
+{\footnotesize (b) Mumbai, issued 10 May 2024: Green}
+\end{minipage}
+\caption{HeatCast-FM viewer (Streamlit) showing Chronos-2+cov forecasts. Each view gives the forecast fan against the IMD heatwave threshold, the warning level and a day-by-day table of event probabilities with verifying observations.}
+\label{fig:app}
+\end{figure*}
+
+\subsection{Case studies}
+Fig.~\ref{fig:cases} shows forecasts issued two days before the three longest heatwave spells at focus regions in the test years, all from late May and early June 2019. In each case both Chronos-2+cov and the AR model expected the heat to ease within the week. Instead it held at or above the threshold. At Jalgaon and Nagpur the 80\% bands still reached the threshold on the first days, so the heatwave probabilities were not zero even though the median was too low. At Chandrapur only the AR band did.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_cases.pdf}
+\caption{Forecasts issued two days before the three longest heatwave spells at focus regions in 2019. Lines show the median, shading the 80\% band. The dashed orange line is the IMD heatwave threshold for each target day.}
+\label{fig:cases}
+\end{figure*}
+
+\subsection{Point validation}
+Table~\ref{tab:localization} checks Chronos-2+cov against city-point Tmax.
+
+\textbf{Raw grid forecasts.} The raw forecasts had a mean point MAE of \LocMAEraw\,\textdegree C for leads 1-3, much larger than their error against the grid itself. The coastal cities and Sambhajinagar had the largest gaps, because the grid cell and the point differ by 1.9-2.6\,\textdegree C on average.
+
+\textbf{After correction.} The monthly linear correction brought the mean point MAE down to \LocMAEcor\,\textdegree C and CRPS from \LocCRPSraw{} to \LocCRPScor. The correction helped most at Mumbai and Ratnagiri. It made results slightly worse at Chandrapur and Jalgaon, where the grid and the point already agreed well.
+
+\input{tab_localization.tex}
+
+\subsection{Humid heat at the coast}
+Fig.~\ref{fig:humid} compares IMD Tmax-rule heatwave days with days when the heat index passed the NOAA Danger level (39.4\,\textdegree C) without a Tmax heatwave.
+
+\begin{itemize}
+\item \textbf{Mumbai:} \HumidMumbai{} such humid heat days in 1991-2024, against \TmaxhwMumbai{} Tmax-rule days.
+\item \textbf{Ratnagiri:} \HumidRatnagiri{} humid heat days, against \TmaxhwRatnagiri{} Tmax-rule days.
+\item \textbf{Pune (inland):} only \HumidPune{} humid heat days.
+\end{itemize}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{fig_humid_heat.pdf}
+\caption{March-June days per year at two coastal cities and inland Pune (station proxy). Blue: IMD Tmax-rule heatwave days. Orange: days with heat index at or above 39.4\,\textdegree C (NOAA Danger) that the Tmax rule did not flag.}
+\label{fig:humid}
+\end{figure*}

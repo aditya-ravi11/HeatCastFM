@@ -1,0 +1,56 @@
+# HeatCast-FM configuration
+
+paths:
+  raw: data/raw
+  processed: data/processed
+  predictions: outputs/predictions
+  metrics: outputs/metrics
+  figures: outputs/figures
+
+years:
+  first: 1951
+  last: 2024
+  normal_start: 1981     # 1981-2010 normals keep all validation and test years out of the baseline
+  normal_end: 2010
+  train_end: 2014        # train: first .. train_end
+  clim_start: 1985       # climatology model uses the last 30 training years
+  val: [2015, 2016, 2017, 2018]
+  test: [2019, 2020, 2021, 2022, 2023, 2024]
+
+station_proxy:
+  first: 1990
+
+season:                  # forecast issue window (month, day)
+  start: [3, 1]
+  end: [6, 30]
+
+forecast:
+  horizon: 7
+  context: 512
+  quantiles: [0.01, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99]
+  t5_samples: 20         # Chronos default; kept small for runtime on a 16 GB laptop
+
+# IMD heatwave criteria (FAQ on Heat Wave, IMD)
+criteria:
+  plains:  {tmax_min: 40.0, hw_dep: 4.5, severe_dep: 6.5, hw_abs: 45.0, severe_abs: 47.0}
+  coastal: {tmax_min: 37.0, hw_dep: 4.5, severe_dep: 6.5, hw_abs: null, severe_abs: null}
+
+# Focus regions. Grid cell is the nearest valid IMD 1 degree cell.
+regions:
+  - {name: Mumbai,        lat: 19.076, lon: 72.878, type: coastal, zone: Konkan}
+  - {name: Ratnagiri,     lat: 16.990, lon: 73.312, type: coastal, zone: Konkan}
+  - {name: Pune,          lat: 18.520, lon: 73.857, type: plains,  zone: Madhya Maharashtra}
+  - {name: Jalgaon,       lat: 21.004, lon: 75.563, type: plains,  zone: Madhya Maharashtra}
+  - {name: Sambhajinagar, lat: 19.877, lon: 75.343, type: plains,  zone: Marathwada}
+  - {name: Nagpur,        lat: 21.146, lon: 79.088, type: plains,  zone: Vidarbha}
+  - {name: Chandrapur,    lat: 19.962, lon: 79.296, type: plains,  zone: Vidarbha}
+
+# Box of IMD cells used for pooled event statistics
+box:
+  lat: [16.5, 21.5]
+  lon: [74.5, 79.5]      # inland cells only, so plains criteria apply
+
+models:
+  chronos2: amazon/chronos-2
+  bolt: amazon/chronos-bolt-small
+  t5: amazon/chronos-t5-small
