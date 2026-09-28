@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HeatCast-FM Viewer</title>
+<meta name="description" content="7-day heatwave forecasts and IMD-style warnings for Maharashtra from Chronos time-series foundation models.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e8590c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="wrap">
+  <header class="top">
+    <div>
+      <h1>HeatCast-FM</h1>
+      <p class="sub">7-day maximum temperature forecasts and IMD heatwave warnings for Maharashtra, from Chronos time-series foundation models. Data: IMD 1&deg; gridded Tmax.</p>
+    </div>
+    <nav class="links">
+      <a href="https://github.com/aditya-ravi11/HeatCastFM">GitHub</a>
+      <a href="https://github.com/aditya-ravi11/HeatCastFM/blob/main/report/HeatCast-FM_Report.pdf">Report (PDF)</a>
+    </nav>
+  </header>
+
+  <section class="controls" aria-label="Forecast selection">
+    <label>Region
+      <select id="region"></select>
+    </label>
+    <label>Model
+      <select id="model"></select>
+    </label>
+    <label>Forecast issued on (last observed day)
+      <input type="date" id="date">
+    </label>
+  </section>
+
+  <div class="examples" aria-label="Examples">
+    <span>Try:</span>
+    <button data-r="Nagpur" data-d="2019-05-31">Nagpur, 31 May 2019</button>
+    <button data-r="Chandrapur" data-d="2019-05-24">Chandrapur, 24 May 2019</button>
+    <button data-r="Jalgaon" data-d="2019-06-03">Jalgaon, 3 Jun 2019</button>
+    <button data-r="Mumbai" data-d="2024-05-10">Mumbai, 10 May 2024</button>
+  </div>
+
+  <p id="note" class="note" hidden></p>
+
+  <div id="banner" class="banner" role="status"></div>
+
+  <section class="main">
+    <div class="chart-card">
+      <div class="legend" id="legend"></div>
+      <div class="chart" id="chart"></div>
+      <div class="tooltip" id="tooltip" hidden></div>
+    </div>
+    <aside class="stats">
+      <div class="stat"><div class="k">Warning level</div><div class="v" id="s-level">-</div></div>
+      <div class="stat"><div class="k">Max P(heatwave)</div><div class="v" id="s-hw">-</div></div>
+      <div class="stat"><div class="k">Max P(hot day)</div><div class="v" id="s-hot">-</div></div>
+    </aside>
+  </section>
+
+  <div class="table-wrap">
+    <table id="table">
+      <thead><tr>
+        <th>Date</th><th class="num">Median</th><th class="num">10-90%</th><th class="num">HW threshold</th>
+        <th class="num">P(hot day)</th><th class="num">P(heatwave)</th><th class="num">P(severe)</th>
+        <th>Level</th><th class="num">Observed</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <p class="caption" id="rule"></p>
+
+  <details class="about">
+    <summary>How to read this</summary>
+    <ul>
+      <li><b>Hot day</b>: Tmax above the local 90th percentile for that time of year (1981-2010).</li>
+      <li><b>IMD heatwave</b>: plains, Tmax at least 40&nbsp;&deg;C and at least 4.5&nbsp;&deg;C above normal, or at least 45&nbsp;&deg;C. Coastal (Mumbai, Ratnagiri), Tmax at least 37&nbsp;&deg;C and at least 4.5&nbsp;&deg;C above normal. Severe: departure of 6.5&nbsp;&deg;C or more, or Tmax of 47&nbsp;&deg;C or more on the plains.</li>
+      <li><b>Levels</b>: Yellow when P(hot day) passes a threshold, Orange when P(heatwave) passes a threshold (both tuned on 2015-2018 for each model), Red when P(severe) is 50% or more.</li>
+      <li>Forecasts are the saved rolling backtest for 1 March to 30 June of 2015-2024. The Chronos models were used zero-shot, without training on Indian data.</li>
+    </ul>
+  </details>
+
+  <footer>Aditya Ravi and Dirshak Deep Patro, Department of Information Technology (AI &amp; DS), K. J. Somaiya College of Engineering, Mumbai.</footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
