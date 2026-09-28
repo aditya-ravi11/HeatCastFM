@@ -6,7 +6,7 @@ __pycache__/
 .DS_Store
 
 # large or regenerable data
-data/
+/data/
 logs/
 outputs/predictions/
 outputs/chronos2_lora/
