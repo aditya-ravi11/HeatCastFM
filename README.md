@@ -196,9 +196,8 @@ report/                   LaTeX source and the PDF report
 ```
 
 ## Authors
-
-- Aditya Ravi (16014223004), aditya.ravi@somaiya.edu
-- Dirshak Deep Patro (16014223033), dirshak.p@somaiya.edu
+Aditya Ravi (16014223004), aditya.ravi@somaiya.edu
+Dirshak Deep Patro (16014223033), dirshak.p@somaiya.edu
 
 Department of Information Technology (AI & DS), K. J. Somaiya College of Engineering, Mumbai.
 
